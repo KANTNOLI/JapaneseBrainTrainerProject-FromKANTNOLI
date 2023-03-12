@@ -1,6 +1,13 @@
 #include "logic.h" 
+
+int create_chance() {
+	int chance = rand() % 4;
+	return chance;
+}
+
+
 void create_numbers(int* array, int size) {
-	int min = -9;
+	int min = 0;
 	int max = 9;
 	for (int i = 0; i < size; i++)
 	{
@@ -9,76 +16,34 @@ void create_numbers(int* array, int size) {
 
 }
 
-string output_examples(int fnum, int snum, int tnum, char fsim, char ssim) {
-	string msg = "";
 
-	msg += to_string(snum) + " " + fsim + " " + to_string(fnum) + " " + ssim + " " + to_string(tnum) + " = ";
+string create_examples(int* array, int chance) {
+	string msg = "";
+	char fsing = chance == 0 ? '+' : chance == 1 ? '-' : chance == 2 ? '-' : '+';
+	char ssing = chance == 0 ? '+' : chance == 1 ? '-' : chance == 2 ? '+' : '-';
+
+	msg += to_string(array[0]) + " " + fsing + " " + to_string(array[1]) + " " + ssing + " " + to_string(array[2]) + " = ";
 
 	return msg;
 }
 
+int create_result_example(int* array, int chance) {
+	int o_result = array[0] + array[1] + array[2];
+	int t_result = array[0] - array[1] - array[2];
+	int tr_result = array[0] - array[1] + array[2];
+	int f_result = array[0] + array[1] - array[2];
 
-
-int create_examples(int* array, int size, int fnum, int snum, int tnum) {
-	int result = 0;
-	int chance = rand() % 3;
-	char fsim = '+';
-	char ssim = '+';
-	if (chance == 0) {
-		fsim = '-';
-		ssim = '+';
-		result = fnum - snum;
-		cout << result * -1 << " t " << endl;
-		result = result + tnum;
-		cout << result << " t " << endl;
-
-	}
-	else if (chance == 1) {
-		fsim = '+';
-		ssim = '-';
-		result = fnum + snum;
-		cout << result * -1 << " t " << endl;
-		result = result - tnum;
-		cout << result << " t " << endl;
-	}
-	else {
-		result = fnum + snum + tnum;
-	}
-
-	cout << output_examples(fnum, snum, tnum, fsim, ssim) << result << endl;
-
+	int result = chance == 0 ? o_result : chance == 1 ? t_result : chance == 2 ? tr_result : f_result;
 	return result;
 }
 
-void settings(int* array, int size) {
-
-	cout << "Every 10 numbers, there will be an opportunity to complete the game - enter to start" << endl;
-	getchar();
-	system("cls");
-	for (;;)
-	{
-		for (int i = 0; i < 10; i++)
-		{
-			int input = 0;
-			create_numbers(array, size);
-			int fnum = array[0];
-			int snum = array[1];
-			int tnum = array[2];
-			int result = create_examples(array, size, fnum, snum, tnum);
-			do
-			{
-				cin >> input;
-			} while (input != result);
-		}
-		int g;
-		cout << "Stop? Yes - 1, No - 0";
-		cin >> g;
-		if (g == 1)
-		{
-			return;
-		}
-		system("cls");
-	}
+int logic_examples(int* array) {
+	int chance = create_chance();
 
 
+	int result = create_result_example(array, chance);
+	create_examples(array, chance);
+
+
+	return 0;
 }
